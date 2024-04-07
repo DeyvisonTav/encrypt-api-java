@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EncryptService {
 
-    private AES256TextEncryptor textEncryptor;
+   final private AES256TextEncryptor textEncryptor;
     public EncryptService( AES256TextEncryptor textEncryptor) {
         this.textEncryptor = textEncryptor;
 

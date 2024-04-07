@@ -16,18 +16,21 @@ import lombok.Setter;
 public class Operation {
 
     @Column(nullable = false, unique = true)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 
-    @Column(name = "userdocument")
+    @Column(name = "userdocument",nullable = false)
      private String userDocument;
 
-    @Column(name = "creditcardtoken")
+    @Column(name = "creditcardtoken", nullable = false)
     private String creditCardToken;
-    @Column(name = "operationvalue")
+    @Column(name = "operationvalue", nullable = false)
     private Long operationValue;
 
+    public Long getId() {
+        return id;
+    }
 
     public String getUserDocument() {
         return userDocument;
@@ -52,6 +55,8 @@ public class Operation {
     public void setOperationValue(Long operationValue) {
         this.operationValue = operationValue;
     }
+
+
 
 
 }

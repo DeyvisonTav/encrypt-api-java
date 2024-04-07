@@ -1,6 +1,6 @@
 package deyvisontav.com.encryptapi.config;
 
-import org.jasypt.util.binary.AES256BinaryEncryptor;
+import org.jasypt.util.text.AES256TextEncryptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,12 +8,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class JasyptConfig {
 
-    @Value( "${encrypt.key}" )
-    private String secretKey;
+    @Value("${encryptor.password}")
+    private String encryptionPassword;
     @Bean
-    public AES256BinaryEncryptor createEncryptor() {
-        AES256BinaryEncryptor textEncryptor = new AES256BinaryEncryptor();
-        textEncryptor.setPassword(secretKey);
-        return textEncryptor;
+    public AES256TextEncryptor textEncryptor() {
+        AES256TextEncryptor encryptor = new AES256TextEncryptor();
+        encryptor.setPassword(encryptionPassword);
+        return encryptor;
     }
 }
+
