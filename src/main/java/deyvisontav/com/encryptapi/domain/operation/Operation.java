@@ -1,5 +1,6 @@
 package deyvisontav.com.encryptapi.domain.operation;
 
+import deyvisontav.com.encryptapi.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +21,10 @@ public class Operation {
     @Id
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "userid", referencedColumnName = "id", nullable = false)
+    private User userId;
+
     @Column(name = "userdocument",nullable = false)
      private String userDocument;
 
@@ -28,6 +33,16 @@ public class Operation {
     @Column(name = "operationvalue", nullable = false)
     private Long operationValue;
 
+
+    public void setUserId(Long userId) {
+        User user = new User();
+        user.setId(userId);
+        this.userId = user;
+    }
+
+    public User getUser() {
+        return userId;
+    }
     public Long getId() {
         return id;
     }

@@ -1,36 +1,51 @@
 package deyvisontav.com.encryptapi.services;
 
 import deyvisontav.com.encryptapi.domain.operation.Operation;
+import deyvisontav.com.encryptapi.domain.user.User;
 import deyvisontav.com.encryptapi.dto.OperationDTO;
 import deyvisontav.com.encryptapi.repositories.OperationRepository;
+import deyvisontav.com.encryptapi.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
 public class OperationService {
+
+    final private UserRepository user;
    final private OperationRepository repository;
    final private EncryptService encryptService;
 
-    public OperationService(OperationRepository repository, EncryptService encryptService) {
+    public OperationService(OperationRepository repository, EncryptService encryptService, UserRepository user) {
         this.repository = repository;
         this.encryptService = encryptService;
+        this.user = user;
     }
 
-    public Operation create(OperationDTO operationDTO) {
-      Operation operation = new Operation();
+    public Operation create(Long userId, OperationDTO operationDTO) {
+        if (userId == null || operationDTO == null) {
+            throw new IllegalArgumentException("UserId and operationDTO cannot be null.");
+        }
 
-      String userDocumentHashed = this.encryptService.encryptData(operationDTO.userDocument());
-      String creditCardTokenHashed = this.encryptService.encryptData(operationDTO.creditCardToken());
+         this.user.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
 
-      operation.setUserDocument(userDocumentHashed);
-      operation.setCreditCardToken(creditCardTokenHashed);
-      operation.setOperationValue(operationDTO.operationValue());
+        String encryptedUserDocument = this.encryptService.encryptData(operationDTO.userDocument());
+        String encryptedCreditCardToken = this.encryptService.encryptData(operationDTO.creditCardToken());
 
-      this.repository.save(operation);
-      return operation;
+        Operation operation = new Operation();
+        operation.setUserDocument(encryptedUserDocument);
+        operation.setCreditCardToken(encryptedCreditCardToken);
+        operation.setOperationValue(operationDTO.operationValue());
+        operation.setUserId(userId);
+
+        return this.repository.save(operation);
     }
+
+
 
     public OperationDTO read(Long id){
         Optional<Operation> operation = this.repository.findById(id);
@@ -39,7 +54,7 @@ public class OperationService {
             String userDocument = this.encryptService.decryptData(operation.get().getUserDocument());
             String creditCardToken = this.encryptService.decryptData(operation.get().getCreditCardToken());
 
-            return new OperationDTO(userDocument, creditCardToken, operation.get().getOperationValue());
+            return new OperationDTO(userDocument, creditCardToken, operation.get().getOperationValue(), operation.get().getUser().getId());
         } else {
             throw new RuntimeException("Operation not found " + id);
         }

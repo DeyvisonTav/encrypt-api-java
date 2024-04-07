@@ -1,0 +1,9 @@
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY UNIQUE NOT NULL,
+    name TEXT NOT NULL,
+    password TEXT NOT NULL,
+    email TEXT NOT NULL
+);
+
+ALTER TABLE operations ADD COLUMN userId INTEGER;
+ALTER TABLE operations ADD CONSTRAINT fk_userId FOREIGN KEY (userId) REFERENCES users(id);
