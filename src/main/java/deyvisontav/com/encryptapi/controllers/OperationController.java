@@ -32,4 +32,16 @@ public class OperationController {
         OperationDTO operation = this.service.read(id);
         return ResponseEntity.ok(operation);
     }
+
+    @PutMapping
+    public ResponseEntity<OperationDTO> put(@RequestParam Long id, @RequestBody OperationDTO operationDTO) {
+        this.service.put(id, operationDTO);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> delete(@RequestParam Long id) {
+        this.service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

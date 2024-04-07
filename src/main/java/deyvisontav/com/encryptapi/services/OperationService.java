@@ -41,8 +41,35 @@ public class OperationService {
 
             return new OperationDTO(userDocument, creditCardToken, operation.get().getOperationValue());
         } else {
-            throw new RuntimeException("Operation not found" + id);
+            throw new RuntimeException("Operation not found " + id);
         }
 
     }
+
+    public void put(Long id, OperationDTO operationDTO) {
+
+        Operation  operation = this.repository.findById(id).orElseThrow(() -> new RuntimeException("Operation not found " + id));
+
+        if(operationDTO.userDocument() != null){
+            String userDocumentHashed = this.encryptService.encryptData(operationDTO.userDocument());
+            operation.setUserDocument(userDocumentHashed);
+        }
+
+        if(operationDTO.creditCardToken() != null){
+            String creditCardTokenHashed = this.encryptService.encryptData(operationDTO.creditCardToken());
+            operation.setCreditCardToken(creditCardTokenHashed);
+        }
+
+        if(operationDTO.operationValue() != null){
+            operation.setOperationValue(operationDTO.operationValue());
+        }
+
+        this.repository.save(operation);
+    }
+
+    public void delete(Long id) {
+       Operation operation = this.repository.findById(id).orElseThrow(() -> new RuntimeException("Operation not found " + id));
+       this.repository.delete(operation);
+    }
+
 }
