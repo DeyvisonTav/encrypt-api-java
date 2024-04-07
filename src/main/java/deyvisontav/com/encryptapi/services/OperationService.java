@@ -30,7 +30,7 @@ public class OperationService {
             throw new IllegalArgumentException("UserId and operationDTO cannot be null.");
         }
 
-         this.user.findById(userId)
+        User userExists =  this.user.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
 
         String encryptedUserDocument = this.encryptService.encryptData(operationDTO.userDocument());
@@ -42,7 +42,15 @@ public class OperationService {
         operation.setOperationValue(operationDTO.operationValue());
         operation.setUserId(userId);
 
-        return this.repository.save(operation);
+        Operation savedOperation = this.repository.save(operation);
+
+        Long operationId = savedOperation.getId();
+
+        userExists.addOperationId(operationId.intValue());
+
+        this.user.save(userExists);
+
+        return savedOperation;
     }
 
 

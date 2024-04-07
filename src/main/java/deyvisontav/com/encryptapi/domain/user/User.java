@@ -29,7 +29,33 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-   public Long getId() {
+    @Column(nullable = false, name = "operation_ids")
+    private
+    Integer[] operationIds;
+
+    public Integer[] getOperationIds() {
+        return operationIds;
+    }
+
+    public void setOperationIds(Integer[] operationIds) {
+        this.operationIds = operationIds;
+    }
+
+    public void addOperationId(int id) {
+        if (this.operationIds == null) {
+            this.operationIds = new Integer[]{id};
+        } else {
+            Integer[] newOperationIds = new Integer[this.operationIds.length + 1];
+
+            System.arraycopy(this.operationIds, 0, newOperationIds, 0, this.operationIds.length);
+
+            newOperationIds[this.operationIds.length] = id;
+
+            this.operationIds = newOperationIds;
+        }
+    }
+
+    public Long getId() {
        return id;
    }
 
