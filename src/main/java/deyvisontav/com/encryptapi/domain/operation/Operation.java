@@ -6,10 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
+
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "operations")
 public class Operation {
@@ -19,14 +20,40 @@ public class Operation {
     @Id
     private Long id;
 
-    @Column(nullable = false, name = "userdocument")
-    private String userDocument;
+    @Column(name = "userdocument")
+     private String userDocument;
 
-    @Column(nullable = false, name = "creditcardtoken")
+    @Column(name = "creditcardtoken")
     private String creditCardToken;
-
-    @Column(nullable = false, name = "operationvalue")
+    @Column(name = "operationvalue")
     private Long operationValue;
 
+
+    public String getUserDocument() {
+        return userDocument;
+    }
+
+    public void setUserDocument(String userDocument) {
+        this.userDocument = userDocument;
+    }
+
+    public String getCreditCardToken() {
+        return creditCardToken;
+    }
+
+    public void setCreditCardToken(String creditCardToken) {
+        this.creditCardToken = creditCardToken;
+    }
+
+    public Long getOperationValue() {
+        return operationValue;
+    }
+
+    public void setOperationValue(Long operationValue) {
+        this.operationValue = operationValue;
+    }
+
+
 }
+
 
