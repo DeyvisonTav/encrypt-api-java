@@ -20,11 +20,10 @@ public class OperationController {
     }
 
     @PostMapping("/{userId}")
-    public ResponseEntity<Operation> create(@PathVariable Long userId, @RequestBody OperationDTO operationDTO, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<Operation> create(@PathVariable Long userId, @RequestBody OperationDTO operationDTO) {
         Operation newOperation = this.service.create(userId, operationDTO);
 
-        var uri =  uriComponentsBuilder.path("/api/operation/{id}").buildAndExpand(newOperation.getId()).toUri();
-        return ResponseEntity.created(uri).body(newOperation);
+        return ResponseEntity.status(201).body(newOperation);
     }
 
 

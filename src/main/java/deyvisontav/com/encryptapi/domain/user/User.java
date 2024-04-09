@@ -29,7 +29,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, name = "operation_ids")
+    @Column(name = "operation_ids")
     private
     Integer[] operationIds;
 
@@ -50,6 +50,22 @@ public class User {
             System.arraycopy(this.operationIds, 0, newOperationIds, 0, this.operationIds.length);
 
             newOperationIds[this.operationIds.length] = id;
+
+            this.operationIds = newOperationIds;
+        }
+    }
+
+    public void removeOperationId(int id) {
+        if (this.operationIds != null) {
+            Integer[] newOperationIds = new Integer[this.operationIds.length - 1];
+
+            int index = 0;
+            for (Integer operationId : this.operationIds) {
+                if (operationId != id) {
+                    newOperationIds[index] = operationId;
+                    index++;
+                }
+            }
 
             this.operationIds = newOperationIds;
         }

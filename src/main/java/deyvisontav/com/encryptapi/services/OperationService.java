@@ -91,8 +91,11 @@ public class OperationService {
     }
 
     public void delete(Long id) {
-       Operation operation = this.repository.findById(id).orElseThrow(() -> new RuntimeException("Operation not found " + id));
-       this.repository.delete(operation);
+        Operation operation = this.repository.findById(id).orElseThrow(() -> new RuntimeException("Operation not found " + id));
+        User user = operation.getUser();
+        user.removeOperationId(id.intValue());
+        this.repository.delete(operation);
+
     }
 
 }

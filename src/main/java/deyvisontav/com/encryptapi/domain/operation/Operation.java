@@ -39,6 +39,8 @@ public class Operation {
         user.setId(userId);
         this.userId = user;
     }
+    
+
 
     public User getUser() {
         return userId;
